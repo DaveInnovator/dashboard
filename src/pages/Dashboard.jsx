@@ -1,0 +1,175 @@
+import { useState } from "react";
+import {
+  BarChart as BarChartIcon,
+  Users,
+  CreditCard,
+  DollarSign,
+} from "lucide-react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+
+// Mock Chart Data
+const chartData = [
+  { name: "Jan", revenue: 4000 },
+  { name: "Feb", revenue: 3200 },
+  { name: "Mar", revenue: 2800 },
+  { name: "Apr", revenue: 5100 },
+  { name: "May", revenue: 4700 },
+  { name: "Jun", revenue: 6200 },
+];
+
+// Mock Transactions
+const transactions = [
+  { id: 1, user: "John Doe", amount: "$120", status: "Completed", date: "2025-09-20" },
+  { id: 2, user: "Jane Smith", amount: "$220", status: "Pending", date: "2025-09-21" },
+  { id: 3, user: "Samuel Green", amount: "$500", status: "Failed", date: "2025-09-22" },
+  { id: 4, user: "Emily Brown", amount: "$75", status: "Completed", date: "2025-09-23" },
+];
+
+const Dashboard = () => {
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+
+  const cards = [
+    { title: "Total Users", value: "1,245", icon: <Users />, color: "bg-blue-500" },
+    { title: "Transactions", value: "8,930", icon: <CreditCard />, color: "bg-green-500" },
+    { title: "Revenue", value: "$23,400", icon: <DollarSign />, color: "bg-yellow-500" },
+    { title: "Analytics", value: "View Reports", icon: <BarChartIcon />, color: "bg-purple-500" },
+  ];
+
+  // Filtering logic
+  const filteredTransactions = transactions.filter((tx) => {
+    const matchesSearch = tx.user.toLowerCase().includes(search.toLowerCase());
+    const matchesStatus = statusFilter ? tx.status === statusFilter : true;
+    return matchesSearch && matchesStatus;
+  });
+
+  return (
+    <div>
+      <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
+
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {cards.map((card, idx) => (
+          <div
+            key={idx}
+            className="p-6 bg-white dark:bg-gray-800 shadow rounded-2xl flex items-center space-x-4"
+          >
+            <div
+              className={`${card.color} p-3 rounded-full text-white flex items-center justify-center`}
+            >
+              {card.icon}
+            </div>
+            <div>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{card.title}</p>
+              <h2 className="text-xl font-bold">{card.value}</h2>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Chart + Transactions */}
+      <div className="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Chart */}
+        <div className="col-span-1 lg:col-span-2 p-6 bg-white dark:bg-gray-800 rounded-2xl shadow">
+          <h2 className="text-lg font-semibold mb-4">Revenue Overview</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.2} />
+              <XAxis dataKey="name" stroke="currentColor" />
+              <YAxis stroke="currentColor" />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#1f2937",
+                  color: "#fff",
+                  borderRadius: "8px",
+                }}
+              />
+              <Bar dataKey="revenue" fill="#3b82f6" radius={[6, 6, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Transactions Table */}
+        <div className="col-span-1 p-6 bg-white dark:bg-gray-800 rounded-2xl shadow overflow-x-auto">
+          {/* Title + Filters */}
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
+            <h2 className="text-lg font-semibold">Recent Transactions</h2>
+
+            <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+              <input
+                type="text"
+                placeholder="Search user..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 text-sm w-full sm:w-48"
+              />
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 text-sm w-full sm:w-40"
+              >
+                <option value="">All Status</option>
+                <option value="Completed">Completed</option>
+                <option value="Pending">Pending</option>
+                <option value="Failed">Failed</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Table */}
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="text-left border-b border-gray-200 dark:border-gray-700">
+                <th className="py-2">User</th>
+                <th className="py-2">Amount</th>
+                <th className="py-2">Status</th>
+                <th className="py-2">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredTransactions.length > 0 ? (
+                filteredTransactions.map((tx) => (
+                  <tr
+                    key={tx.id}
+                    className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
+                  >
+                    <td className="py-2">{tx.user}</td>
+                    <td className="py-2">{tx.amount}</td>
+                    <td
+                      className={`py-2 font-medium ${
+                        tx.status === "Completed"
+                          ? "text-green-500"
+                          : tx.status === "Pending"
+                          ? "text-yellow-500"
+                          : "text-red-500"
+                      }`}
+                    >
+                      {tx.status}
+                    </td>
+                    <td className="py-2">{tx.date}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" className="py-4 text-center text-gray-500 dark:text-gray-400">
+                    No matching transactions
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;
