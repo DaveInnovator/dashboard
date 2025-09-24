@@ -60,7 +60,7 @@ const Dashboard = () => {
         {cards.map((card, idx) => (
           <div
             key={idx}
-            className="p-6 bg-white dark:bg-gray-800 shadow rounded-2xl flex items-center space-x-4"
+            className="p-6 bg-white  shadow rounded-2xl flex items-center space-x-4"
           >
             <div
               className={`${card.color} p-3 rounded-full text-white flex items-center justify-center`}
@@ -68,7 +68,7 @@ const Dashboard = () => {
               {card.icon}
             </div>
             <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">{card.title}</p>
+              <p className="text-sm text-gray-500 ">{card.title}</p>
               <h2 className="text-xl font-bold">{card.value}</h2>
             </div>
           </div>
@@ -78,7 +78,7 @@ const Dashboard = () => {
       {/* Chart + Transactions */}
       <div className="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Chart */}
-        <div className="col-span-1 lg:col-span-2 p-6 bg-white dark:bg-gray-800 rounded-2xl shadow">
+        <div className="col-span-1 lg:col-span-2 p-6 bg-white  rounded-2xl shadow">
           <h2 className="text-lg font-semibold mb-4">Revenue Overview</h2>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={chartData}>
@@ -98,7 +98,7 @@ const Dashboard = () => {
         </div>
 
         {/* Transactions Table */}
-        <div className="col-span-1 p-6 bg-white dark:bg-gray-800 rounded-2xl shadow overflow-x-auto">
+        <div className="col-span-1 p-6 bg-white rounded-2xl shadow overflow-x-auto">
           {/* Title + Filters */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
             <h2 className="text-lg font-semibold">Recent Transactions</h2>
@@ -109,12 +109,12 @@ const Dashboard = () => {
                 placeholder="Search user..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 text-sm w-full sm:w-48"
+                className="px-3 py-2 rounded-lg border border-gray-300  text-sm w-full sm:w-48"
               />
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 text-sm w-full sm:w-40"
+                className="px-3 py-2 rounded-lg border border-gray-300  text-sm w-full sm:w-40"
               >
                 <option value="">All Status</option>
                 <option value="Completed">Completed</option>
@@ -127,7 +127,7 @@ const Dashboard = () => {
           {/* Table */}
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left border-b border-gray-200 dark:border-gray-700">
+              <tr className="text-left border-b border-gray-200 ">
                 <th className="py-2">User</th>
                 <th className="py-2">Amount</th>
                 <th className="py-2">Status</th>
@@ -139,7 +139,7 @@ const Dashboard = () => {
                 filteredTransactions.map((tx) => (
                   <tr
                     key={tx.id}
-                    className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
+                    className="border-b border-gray-100 hover:bg-gray-50 "
                   >
                     <td className="py-2">{tx.user}</td>
                     <td className="py-2">{tx.amount}</td>
@@ -159,7 +159,7 @@ const Dashboard = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="4" className="py-4 text-center text-gray-500 dark:text-gray-400">
+                  <td colSpan="4" className="py-4 text-center text-gray-500 ">
                     No matching transactions
                   </td>
                 </tr>
